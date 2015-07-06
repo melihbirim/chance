@@ -1,8 +1,6 @@
-package paralel;
-
-
 import org.junit.Assert;
 import org.junit.Test;
+import paralel.Chance;
 
 public class BoolTest {
     @Test

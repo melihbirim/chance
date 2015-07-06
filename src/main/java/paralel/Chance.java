@@ -3,9 +3,22 @@ package paralel;
 import java.math.BigDecimal;
 import java.util.Random;
 
+/**
+ * Java clone of http://chancejs.com/
+ * <p/>
+ * Chance is a minimalist generator of random strings, numbers, etc.
+ * to help reduce some monotony particularly while writing automated tests or anywhere else you need anything random.
+ */
 public class Chance {
-    private static final Random random = new Random();
+    private static Random random = new Random();
     private static final String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+
+    /**
+     * Updates the random instance
+     */
+    public static void update() {
+        random = new Random();
+    }
 
     /**
      * returns random boolean
