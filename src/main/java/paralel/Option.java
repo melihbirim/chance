@@ -48,11 +48,39 @@ public interface Option {
 
     final class Strings extends Ints {
         String pool;
-        boolean unsigned = true;
+        int min = 1;
+        int max = 30;
+
+        public Strings() {
+        }
+
+        public Strings(int min, int max, String pool) {
+            this.pool = pool;
+            this.min(min);
+            this.max(max);
+        }
+
+        public Strings min(int min) {
+            this.min = min;
+            return this;
+        }
+
+        public Strings max(int max) {
+            this.max = max;
+            return this;
+        }
 
         public Strings pool(String pool) {
             this.pool = pool;
             return this;
+        }
+
+        public Strings digit() {
+            return pool(Chance.digits);
+        }
+
+        public Strings symbols() {
+            return pool(Chance.symbols);
         }
     }
 }

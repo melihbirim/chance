@@ -9,9 +9,12 @@ import java.util.Random;
  * Chance is a minimalist generator of random strings, numbers, etc.
  * to help reduce some monotony particularly while writing automated tests or anywhere else you need anything random.
  */
-public class Chance {
-    private static Random random = new Random();
-    private static final String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+public final class Chance {
+    static Random random = new Random();
+    static final String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+    static final String alphabet_chars_only = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static final String digits = "0123456789";
+    static final String symbols = "!@#$%^&*()";
 
     /**
      * Updates the random instance
@@ -63,7 +66,7 @@ public class Chance {
      * It can be defined max, min, and round options
      */
     public static double floating(Option.Floatings options) {
-        if (options.min <= options.max) {
+        if (options.max < options.min) {
             throw new IllegalArgumentException("Options max value should be bigger than min");
         }
         Double value = (options.max - options.min);
@@ -89,12 +92,16 @@ public class Chance {
         return random.nextInt(max);
     }
 
+    public static int integer(int min, int max) {
+        return random.nextInt((max - min) + 1) + min;
+    }
+
     /**
      * Returns a new random double value with given options.
      * It can be defined max, min, and round options
      */
     public static int integer(Option.Ints options) {
-        if (options.min <= options.max) {
+        if (options.max < options.min) {
             throw new IllegalArgumentException("Options max value should be bigger than min");
         }
 
@@ -102,7 +109,7 @@ public class Chance {
             throw new IllegalArgumentException("Options min value should be bigger or equal to 0");
         }
 
-        return random.nextInt((options.max - options.min) + 1) + options.min;
+        return integer(options.min, options.max);
     }
 
     /**
@@ -127,9 +134,10 @@ public class Chance {
 
     /**
      * Generates random length random string value within given pool string
+     * min 1, max 30 characters
      */
     public static String string(String pool) {
-        return string(new Option.Strings().pool(pool));
+        return string(new Option.Strings().pool(pool).min(1).max(30));
     }
 
 
@@ -138,7 +146,7 @@ public class Chance {
      * options may have max, min, and pools
      */
     public static String string(Option.Strings options) {
-        int length = integer(options);
+        int length = integer(options.min, options.max);
 
         if (options.pool == null)
             options.pool = alphabet;
