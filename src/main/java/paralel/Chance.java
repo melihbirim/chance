@@ -13,8 +13,11 @@ public final class Chance {
     static Random random = new Random();
     static final String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
     static final String alphabet_chars_only = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static final String alphabet_upper_chars_only = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static final String alphabet_lower_chars_only = "abcdefghijklmnopqrstuvwxyz";
     static final String digits = "0123456789";
     static final String symbols = "!@#$%^&*()";
+    static final char blank = ' ';
 
     /**
      * Updates the random instance
@@ -156,5 +159,67 @@ public final class Chance {
             arr[i] = character(options.pool);
         }
         return new String(arr);
+    }
+
+    /**
+     * Return a semi-pronounceable random (nonsense) word.
+     * ~3-5 chars which seems about right.
+     */
+    public static String word() {
+        return word(Option.Strings.word);
+    }
+
+    public static String word(Option.Strings options) {
+        return string(options);
+    }
+
+
+    /**
+     * Return a random sentence populated by semi-pronounceable random (nonsense) words.
+     * The sentence starts with a capital letter, and ends with a period.
+     * Default is a sentence with a random number of words from 12 to 18.
+     */
+    public static String sentence() {
+        return sentence(integer(12, 18), Chance.alphabet_chars_only);
+    }
+
+    public static String sentence(String pool) {
+        return sentence(integer(12, 18), pool);
+    }
+
+    public static String sentence(int length, String pool) {
+        if (length < 1) {
+            throw new IllegalArgumentException("Options max value should be bigger than min");
+        }
+        StringBuffer sentence = new StringBuffer();
+        int index = 1;
+        sentence.append(character(Chance.alphabet_upper_chars_only)).append(word());
+        while (index++ < length) {
+            sentence.append(blank).append(word());
+        }
+        sentence.append('.');
+        return sentence.toString();
+    }
+
+    /**
+     * Return a random paragraph generated from sentences populated by semi-pronounceable random (nonsense) words.
+     * Default is a paragraph with a random number of sentences from 3 to 7.
+     */
+    public static String paragraph() {
+        return paragraph(integer(3, 7));
+    }
+
+    public static String paragraph(int length, String pool) {
+        int index = 1; // not to clear space at the end of the paragraph
+        StringBuffer paragraph = new StringBuffer();
+        paragraph.append(sentence(pool));
+        while (index++ < length) {
+            paragraph.append(Chance.blank).append(sentence(pool));
+        }
+        return paragraph.toString();
+    }
+
+    public static String paragraph(int length) {
+        return paragraph(length, Chance.alphabet_chars_only);
     }
 }

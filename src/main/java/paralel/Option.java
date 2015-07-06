@@ -51,7 +51,11 @@ public interface Option {
         int min = 1;
         int max = 30;
 
+        static Strings word = new Strings(3, 5, Chance.alphabet_lower_chars_only);
+        static Strings sentence = new Strings(12, 16, Chance.alphabet_lower_chars_only);
+
         public Strings() {
+            this.pool = Chance.alphabet_chars_only;
         }
 
         public Strings(int min, int max, String pool) {
@@ -81,6 +85,10 @@ public interface Option {
 
         public Strings symbols() {
             return pool(Chance.symbols);
+        }
+
+        public Strings all() {
+            return pool(Chance.alphabet);
         }
     }
 }
